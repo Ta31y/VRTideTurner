@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Ocean Cleanup VR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- HUD (desktop) -->
+    <div class="hud">
+      <div class="panel">
+        <div class="title" id="levelTitle">Beach</div>
+        <div id="timerLabel">–:–</div>
+        <div id="totalScoreLabel">Total collected: 0</div>
+        <div class="tip">Desktop: mouse to look · VR: point & trigger</div>
+      </div>
+    </div>
+
+    <!-- HTML dialogs -->
+    <div id="dialog" class="dialog">
+      <div class="dialog-box">
+        <div id="dialogText">🐢 Please come help me clean the ocean!</div>
+        <button id="dialogBtn" class="clickable">Yes, I’ll help!</button>
+      </div>
+    </div>
+
+    <div id="info" class="dialog hidden">
+      <div class="dialog-box">
+        <div id="infoText">Info</div>
+        <button id="infoBtn" class="clickable">Next</button>
+      </div>
+    </div>
+
+    <a-scene
+      id="scene"
+      renderer="antialias: true"
+      webxr="optionalFeatures: local-floor, hand-tracking; requiredFeatures: local-floor"
+    >
+      <!-- sky -->
+      <a-sky id="sky" color="#6cacbb"></a-sky>
+
+      <!-- Beach -->
+      <a-entity id="beachEnv">
+        <a-plane rotation="-90 0 0" width="80" height="80" position="0 0 0" material="color:#e8d7a6"></a-plane>
+        <a-plane rotation="-90 0 0" width="80" height="80" position="0 0 -20" material="color:#5db8ff"></a-plane>
+      </a-entity>
+
+      <!-- Underwater -->
+      <a-entity
+        id="underwaterEnv"
+        visible="false"
+        fog="type: exponential; color: #0a3d62; density: 0.045"
+      >
+        <a-entity light="type: ambient; intensity: 0.45; color: #7fd0ff"></a-entity>
+        <a-entity light="type: directional; intensity: 0.65; color: #bfe9ff" position="0 6 -3"></a-entity>
+
+        <a-plane rotation="-90 0 0" width="120" height="120" position="0 -1.1 0" material="color:#d9c79c"></a-plane>
+
+        <a-entity id="spawner"></a-entity>
+
+        <a-entity
+          id="score3D"
+          text="value: Trash: 0; align: center; color: white; width: 2"
+          position="0 0.6 -1.4"
+        ></a-entity>
+      </a-entity>
+
+      <!-- 3D start panel -->
+      <a-entity id="startPanel" position="0 1.6 -2" start-panel class="clickable">
+        <a-plane width="1.5" height="0.8" color="#053b4d" opacity="0.9"></a-plane>
+        <a-text
+          value="🐢 Help me clean the ocean!\nTrigger / click to start"
+          align="center"
+          width="1.4"
+          position="0 0 0.01"
+          color="#fff"
+        ></a-text>
+      </a-entity>
+
+      <!-- Player rig (NO auto-swim) -->
+      <a-entity id="rig" position="0 1.6 8" hand-vr-sync>
+        <a-entity
+          id="cam"
+          camera
+          look-controls
+          cursor="rayOrigin: mouse"
+          raycaster="objects: .clickable"
+        ></a-entity>
+
+        <!-- desktop hands -->
+        <a-box
+          id="leftHand"
+          visible="false"
+          depth="0.12"
+          height="0.08"
+          width="0.18"
+          position="-0.25 -0.15 -0.5"
+          color="#f3d2a2"
+        ></a-box>
+
+        <a-entity id="rightHand" visible="false" position="0.25 -0.15 -0.5">
+          <a-box depth="0.12" height="0.08" width="0.18" color="#f3d2a2"></a-box>
+          <a-entity
+            id="net"
+            position="0 -0.02 -0.18"
+            net-collector="radius: 0.65; score3D: #score3D"
+            net-boost
+          >
+            <a-ring radius-inner="0.26" radius-outer="0.28" material="wireframe:true; color:#fff"></a-ring>
+            <a-cylinder position="0 -0.18 0.06" radius="0.02" height="0.35" color="#c1c1c1"></a-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <!-- Controllers -->
+      <a-entity
+        id="leftController"
+        oculus-touch-controls="hand: left"
+        laser-controls="hand: left"
+        raycaster="objects: .clickable"
+      ></a-entity>
+
+      <a-entity
+        id="rightController"
+        oculus-touch-controls="hand: right"
+        laser-controls="hand: right"
+        raycaster="objects: .clickable"
+        controller-debug
+      ></a-entity>
+
+      <!-- Turtle -->
+      <a-entity id="turtle" turtle-guide="offset: -0.4 0 -1.2">
+        <a-sphere radius="0.18" color="#4caf50"></a-sphere>
+        <a-box depth="0.35" height="0.1" width="0.25" color="#2e7d32" position="0 0 -0.08"></a-box>
+        <a-entity text="value: Guide; color: white; align: center; width: 2" position="0 0.4 0"></a-entity>
+      </a-entity>
+
+      <!-- Game -->
+      <a-entity id="game" game-manager></a-entity>
+    </a-scene>
+
+    <script src="game.js"></script>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* HUD */
+.hud {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  pointer-events: none;
+}
+.panel {
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+}
+.title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.tip {
+  opacity: 0.85;
+  font-size: 12px;
+  margin-top: 4px;
+}
+#timerLabel, #totalScoreLabel {
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+/* Dialogs */
+.dialog {
+  position: fixed;
+  inset: 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,.35);
+  z-index: 20;
+}
+.dialog.hidden {
+  display:none;
+}
+.dialog-box {
+  background:#ffffffee;
+  padding:16px 18px;
+  border-radius:14px;
+  max-width: 520px;
+  text-align:center;
+}
+.dialog-box button {
+  margin-top:10px;
+  padding:8px 14px;
+  border-radius:10px;
+  border:0;
+  background:#1673ff;
+  color:#fff;
+  cursor:pointer;
+}
